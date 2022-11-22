@@ -49,7 +49,6 @@ let fileContentChange = async (event: any) => {
             toast.success(e.data.msg, {
                 timeout: 2000,
             })
-            window.myApi?._7zip(e.data.queryid).then(console.log)
         })
         //worker3.terminate()
     })
