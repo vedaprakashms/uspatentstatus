@@ -1,0 +1,44 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+    appId: 'YourAppID',
+    asar: true,
+    directories: {
+        output: 'release',
+    },
+    files: ['dist', 'dist-electron'],
+    mac: {
+        artifactName: '${productName}_${version}.${ext}',
+        target: ['dmg'],
+    },
+    linux: {
+        target: ['deb', 'AppImage', '7z'],
+        category: 'Utility',
+        icon: './icons/',
+    },
+    win: {
+        target: [
+            {
+                target: 'nsis',
+                arch: ['x64'],
+            },
+            {
+                target: 'portable',
+                arch: ['x64'],
+            },
+            '7z',
+        ],
+        icon: './icons/',
+    },
+    portable: {
+        artifactName: '${productName}-${version}-portable.${ext}',
+    },
+    nsis: {
+        artifactName: '${productName}_${version}.${ext}',
+        oneClick: false,
+        perMachine: false,
+        allowToChangeInstallationDirectory: true,
+        deleteAppDataOnUninstall: false,
+    },
+}
