@@ -45,12 +45,13 @@ let fileContentChange = async (event: any) => {
             filepath: window.myApi?.getDownloadPath(),
         })
         worker3.addEventListener('message', (e) => {
-            console.log(e.data)
             toast.success(e.data.msg, {
                 timeout: 2000,
             })
+            window.myApi?.unzip(e.data.queryid).then((r) => {
+                console.log(r)
+            })
         })
-        //worker3.terminate()
     })
 }
 //when the application and patent numbers are put this method is taken into consideration.
@@ -80,11 +81,12 @@ let stringData = async () => {
             jsonData: JSON.stringify(uspto.patno),
             filepath: window.myApi?.getDownloadPath(),
         })
-
         worker3.addEventListener('message', (e) => {
-            console.log(e.data)
             toast.success(e.data.msg, {
                 timeout: 2000,
+            })
+            window.myApi?.unzip(e.data.queryid).then((r) => {
+                console.log(r)
             })
         })
     })
