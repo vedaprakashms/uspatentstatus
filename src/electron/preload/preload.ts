@@ -2,7 +2,7 @@ import { contextBridge } from 'electron'
 import { app, BrowserWindow } from '@electron/remote'
 import fs from 'fs'
 import path from 'path'
-import { exec, spawn } from 'child_process'
+import { spawn } from 'child_process'
 
 const Api = {
     getString: (): string => 'this is a Test String',
@@ -77,7 +77,7 @@ const Api = {
                                     )
                                     console.log(JSON.parse(filedata.toString()))
                                 })
-                                console.error(err)
+                                err ? console.error(err) : ''
                             })
                         }, 5000)
                     })
@@ -85,28 +85,54 @@ const Api = {
                     break
                 default:
                     console.log(process.platform)
-                    exec(
-                        'unzip ' + zip_path + ' -d ' + extracted_path,
-                        (error, stdout, stderr) => {
-                            if (error) {
-                                console.error(error)
-                            }
-                            if (stderr) console.error(stderr)
-                            console.log(stdout)
-                        }
+                    // exec(
+                    //     'unzip ' + zip_path + ' -d ' + extracted_path,
+                    //     (error, stdout, stderr) => {
+                    //         if (error) {
+                    //             console.error(error)
+                    //         }
+                    //         if (stderr) console.error(stderr)
+                    //         console.log(stdout)
+                    //     }
+                    // )
+                    let child1 = spawn(
+                        'unzip',
+                        [zip_path, '-d', extracted_path],
+                        { shell: true }
                     )
+                    child1.stdout.on('data', (data) => {
+                        console.log(`std out: ${data}`)
+                    })
+                    child1.stderr.on('data', (data) => {
+                        console.log(`std out: ${data}`)
+                    })
+                    child1.on('close', (code: any) => {
+                        setTimeout(() => {
+                            console.log(`child process ended with code ${code}`)
+                            fs.readdir(extracted_path, (err, files) => {
+                                console.log(files.length)
+                                files.forEach((file) => {
+                                    let filedata = fs.readFileSync(
+                                        path.join(extracted_path, file)
+                                    )
+                                    console.log(JSON.parse(filedata.toString()))
+                                })
+                                err ? console.error(err) : ''
+                            })
+                        }, 5000)
+                    })
                     break
             }
         } else console.error(`File in the path ${zip_path} not found.`)
 
         //let files = fs.readdirSync(extracted_path)
-        fs.readdir(extracted_path, (err, files) => {
-            files.forEach((file) => {
-                let filedata = fs.readFileSync(path.join(extracted_path, file))
-                console.log(JSON.parse(filedata.toString()))
-            })
-            console.error(err)
-        })
+        // fs.readdir(extracted_path, (err, files) => {
+        //     files.forEach((file) => {
+        //         let filedata = fs.readFileSync(path.join(extracted_path, file))
+        //         console.log(JSON.parse(filedata.toString()))
+        //     })
+        //     console.error(err)
+        // })
 
         return extracted_path
     },
