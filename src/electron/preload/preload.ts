@@ -4,6 +4,8 @@ import fs from 'fs'
 import path from 'path'
 import { spawn } from 'child_process'
 
+let kint = 0
+
 const Api = {
     getString: (): string => 'this is a Test String',
     getDownloadPath: (): string => app.getPath('downloads'),
@@ -76,6 +78,11 @@ const Api = {
                                         path.join(extracted_path, file)
                                     )
                                     console.log(JSON.parse(filedata.toString()))
+                                    let datapoint = JSON.parse(
+                                        filedata.toString()
+                                    )
+                                    kint = datapoint.PatentData.length + kint
+                                    console.log(`kint value now is : ${kint}`)
                                 })
                                 err ? console.error(err) : ''
                             })
