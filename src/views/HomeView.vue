@@ -44,11 +44,11 @@ let fileContentChange = async (event: any) => {
             jsonData: JSON.stringify(uspto.patno),
             filepath: window.myApi?.getDownloadPath(),
         })
-        worker3.addEventListener('message', (e) => {
+        worker3.addEventListener('message', async (e) => {
             toast.success(e.data.msg, {
                 timeout: 2000,
             })
-            window.myApi?.unzip(e.data.queryid).then((r) => {
+            await window.myApi?.unzip(e.data.queryid).then((r) => {
                 console.log(r)
             })
         })
