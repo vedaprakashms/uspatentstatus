@@ -58,6 +58,19 @@ const Api = {
                     break
                 default:
                     console.log(process.platform)
+                    exec(
+                        'unzip ' +
+                            zip_path +
+                            ' -d ' +
+                            extracted_path,
+                        (error, stdout, stderr) => {
+                            if (error) {
+                                console.error(error)
+                            }
+                            if (stderr) console.error(stderr)
+                            console.log(stdout)
+                        }
+                    )
                     break
             }
         } else console.error(`File in the path ${zip_path} not found.`)
