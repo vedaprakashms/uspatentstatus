@@ -75,6 +75,17 @@ const Api = {
             }
         } else console.error(`File in the path ${zip_path} not found.`)
 
+        if(fs.existsSync(extracted_path)){
+            console.log(fs.readdirSync(extracted_path))
+            let files = fs.readdirSync(extracted_path)
+
+            files.forEach(file=>{
+                let filedata = fs.readFileSync(path.join(extracted_path, file))
+                console.log(JSON.parse(filedata))
+            })
+
+        }
+
         return extracted_path
     },
 }
